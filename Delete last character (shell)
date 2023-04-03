@@ -1,0 +1,36 @@
+CONTEXT
+Want to remove the last backslash from path like this one:
+/path/to/some/file/or/directory/
+Assume that those path are stored in a file called `input` for convenient input (of some shell script for e.g.).
+
+HOW
+To search for such kind of line in a file:
+$ egrep -E '\/$' input
+Interpretation: A backslash (/) followed by end of the line.
+-E option for extended regex.
+
+To replace that last backslash with `sed`:
+sed -E 's|/$|| <input >output
+Interpretation:
+s: Substitute
+|: Delimiter
+/$: A backslash followed by end of the line.
+
+EXAMPLE SCRIPT
+This script check if a path is valid or not.
+For example, in VS Code after updating a project SDK to newer version, some include paths (C/C++ include path settings for e.g.) might change, some don't.
+Without removing the last backslash, `find` utility reports warning like this:
+`find: warning: -path /path/to/some/file/or/directory/ will not match anything because it ends with /.`
+while read -r line;
+do
+    path=$(echo $line | sed -E 's|/$||')
+    find . -path $path
+    if [ $? -eq 1 ]; then
+        echo $path not found
+    fi
+done < input
+
+Note: There is no spaces between `=` and its operands.
+Note: I don't know way for `sed` to accept `$line` directly. So I have to feed `echo` with it first.
+
+Or do the same as above, but after running sed through the input file instead of each line at a time.
