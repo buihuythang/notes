@@ -1,0 +1,25 @@
+CONTEXT
+when force-pushing local repo to remote repo on github, github displays something like:
+"USERNAME force-pushed the XYZ branch from HASH1 to HASH2 X minutes ago"
+But USERNAME is not your current, it is likely the one you used previous, but not now.
+
+WHAT HAPPENED?
+It seems github remembered the public key associated with old username when you push to github the first time.
+To check if that is the case:
+$ git remote -v
+Then copy the URL.
+$ ssh -vT URL
+Interpretation:
+-T is to disable pseudo-terminal allocation, i.e. I don't want to execute command on remote ssh, I just want to check for some output...
+
+In the ouput of `ssh` above will contain user information at the end of the output, similar to:
+"Hi USERNAME! You've successfully authenticated, but GitHub does not provide shell access."
+You should recognize that USERNAME is your previous name you used for github.
+
+HOW
+Regenerate SSH key pair:
+$ ssh-keygen -t RSA
+Add to github by following this guide:
+https://docs.github.com/en/enterprise-server@3.5/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account
+
+After that, check with `ssh -vT URL` again, it should display current username on github.
