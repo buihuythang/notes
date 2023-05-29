@@ -1,0 +1,29 @@
+CONTEXT
+Want to capture date time in the form like this: Wed Jan 25 09:41:30 UTC 2023 (like the output of `$ uname -a` command)
+
+HOW
+1) 
+\b(Mon(?:day)?|Tue(?:sday)?|Wed(?:nesday)?|Thu(?:rsday)?|Fri(?:day)?|Sat(?:urday)?|Sun(?:day)?)
+ (Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)
+ (\d+)
+ (\d{2}:\d{2}:\d{2})
+ [A-Z]{2,}
+ \d{4}
+ 
+ 2)
+ \b(Mon(?:day)?|Tue(?:sday)?|Wed(?:nesday)?|Thu(?:rsday)?|Fri(?:day)?|Sat(?:urday)?|Sun(?:day)?) (Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?) (\d+) (\d{2}:\d{2}:\d{2}) ([A-Z]{2,}) (\d{4})
+ 
+ 3)
+ \b((?:Mon(?:day)?|Tue(?:sday)?|Wed(?:nesday)?|Thu(?:rsday)?|Fri(?:day)?|Sat(?:urday)?|Sun(?:day)?) (?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?) (?:\d+) (?:\d{2}:\d{2}:\d{2}) (?:[A-Z]{2,}) (?:\d{4}))
+ 
+ 4)
+ \b((?:Mon|Tue|Wed|Thu|Fri|Sat|Sun) (?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (?:\d+) (?:\d{2}:\d{2}:\d{2}) (?:[A-Z]{2,}) (?:\d{4}))
+ 
+ 5) C++ declaration
+ static const regex DateTimeRegex("\\b((?:Mon|Tue|Wed|Thu|Fri|Sat|Sun) "
+                                  "(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) "
+                                  "(?:\\d+) "
+                                  "(?:\\d{2}:\\d{2}:\\d{2}) "
+                                  "(?:[A-Z]{2,}) "
+                                  "(?:\\d{4}))");
+?: is non-capturing group: Groups multiple tokens together without creating a capture group.
